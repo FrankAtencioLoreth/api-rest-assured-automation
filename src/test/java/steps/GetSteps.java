@@ -3,12 +3,13 @@ package steps;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import models.Posts;
 import utils.RestAssuredExt;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GetSteps {
@@ -28,6 +29,8 @@ public class GetSteps {
 
     @Then("I see the unique autor name as {string}")
     public void i_see_the_unique_autor_name_as(String author) {
-        assertThat(RestAssuredExt.response.getBody().jsonPath().get("author"), containsString(author));
+        var post = RestAssuredExt.response.getBody().as(Posts.class);
+        assertThat(post.getAuthor(), equalTo(author));
+        //assertThat(RestAssuredExt.response.getBody().jsonPath().get("author"), containsString(author));
     }
 }

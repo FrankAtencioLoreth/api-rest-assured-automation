@@ -3,14 +3,19 @@ package steps;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import models.Posts;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
+import org.junit.Assert;
 import utils.RestAssuredExt;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.Assert.assertTrue;
 
 public class PostSteps {
 
@@ -33,6 +38,10 @@ public class PostSteps {
 
     @Then("I see the autor name as {string}")
     public void i_see_the_author_name_as(String author) {
-        assertThat(RestAssuredExt.response.getBody().jsonPath().get("author"), hasItem(author));
+        var posts = RestAssuredExt.response.getBody().as(Posts[].class);
+        List<Posts> list = Arrays.asList(posts);
+        //assertTrue(list.stream().anyMatch(item -> author.equals(item.getAuthor())));
+        assertThat(list, hasItem(hasProperty("author", is(author))));
+
     }
 }
